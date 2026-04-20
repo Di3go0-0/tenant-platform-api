@@ -30,7 +30,6 @@ coverage/
 *.sublime-workspace
 
 # dotenv
-.env
 .env.*.local
 
 # Temp
