@@ -1,0 +1,44 @@
+# Claude
+.claude/
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+
+# Tests
+coverage/
+.nyc_output/
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+
+# dotenv
+.env
+.env.*.local
+
+# Temp
+.temp/
+.tmp/
+
+# Runtime
+pids/
+*.pid
+*.seed
+*.pid.lock
