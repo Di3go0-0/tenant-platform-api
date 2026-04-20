@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: tenant_platform_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-tenant_admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-tenant_secret}
+      POSTGRES_DB: ${DB_NAME:-tenant_platform}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - tenant_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: tenant_platform_redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    networks:
+      - tenant_network
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: tenant_platform_api
+    restart: unless-stopped
+    ports:
+      - "${API_PORT:-3000}:3000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-tenant_admin}
+      DB_PASSWORD: ${DB_PASSWORD:-tenant_secret}
+      DB_NAME: ${DB_NAME:-tenant_platform}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      NODE_ENV: development
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - tenant_network
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+
+volumes:
+  pgdata:
+
+networks:
+  tenant_network:
+    driver: bridge
