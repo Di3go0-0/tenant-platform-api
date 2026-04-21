@@ -1,18 +1,11 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  ConflictException,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import { UsersService } from '../users/users.service.js';
 import { AuthRepository } from './repositories/auth.repository.js';
-import { JwtPayload, AuthTokens } from './types/auth.types.js';
-import { RegisterDto } from './dto/register.dto.js';
-import { LoginDto } from './dto/login.dto.js';
+import { JwtPayload, AuthTokens, RegisterData, LoginData } from './types/auth.types.js';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +22,7 @@ export class AuthService {
       this.configService.get<string>('app.jwt.refreshTokenExpiration') || '7d';
   }
 
-  async register(dto: RegisterDto): Promise<AuthTokens> {
+  async register(dto: RegisterData): Promise<AuthTokens> {
     const existing = await this.usersService.findByEmail(dto.email);
     if (existing) {
       throw new ConflictException('Email already registered');
@@ -41,7 +34,7 @@ export class AuthService {
     return this.generateTokens({ sub: user.id, email: user.email });
   }
 
-  async login(dto: LoginDto): Promise<AuthTokens> {
+  async login(dto: LoginData): Promise<AuthTokens> {
     const user = await this.usersService.findByEmail(dto.email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');

@@ -8,6 +8,16 @@ export type AuthTokens = {
   refresh_token: string;
 };
 
+export type RegisterData = {
+  email: string;
+  password: string;
+};
+
+export type LoginData = {
+  email: string;
+  password: string;
+};
+
 export type RefreshTokenEntity = {
   id: string;
   user_id: string;
