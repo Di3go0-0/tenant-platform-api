@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PlsqlService } from '../../../core/plsql/index.js';
 import { AuthQueries } from '../sql/auth.sql.js';
-import { RefreshTokenEntity } from '../interfaces/auth.interfaces.js';
+import { RefreshTokenEntity } from '../types/auth.types.js';
 
 @Injectable()
 export class AuthRepository {

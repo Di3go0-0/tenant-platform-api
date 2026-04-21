@@ -10,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import { UsersService } from '../users/users.service.js';
 import { AuthRepository } from './repositories/auth.repository.js';
-import { JwtPayload, AuthTokens } from './interfaces/auth.interfaces.js';
+import { JwtPayload, AuthTokens } from './types/auth.types.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { LoginDto } from './dto/login.dto.js';
 

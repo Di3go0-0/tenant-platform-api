@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PlsqlService } from '../../../core/plsql/index.js';
 import { UserQueries } from '../sql/users.sql.js';
-import { UserEntity } from '../interfaces/user.entity.js';
+import { UserEntity } from '../types/user.entity.js';
 
 @Injectable()
 export class UsersRepository {
