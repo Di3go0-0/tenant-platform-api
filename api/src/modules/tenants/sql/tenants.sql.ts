@@ -15,7 +15,7 @@ export enum TenantQueries {
     AND deleted_at IS NULL
   `,
   ADD_USER_TO_TENANT = `
-    INSERT INTO user_tenants (user_id, tenant_id, role)
+    INSERT INTO user_tenants (user_id, tenant_id, role_id)
     VALUES ($1, $2, $3)
     RETURNING *
   `,
