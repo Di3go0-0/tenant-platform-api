@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import type { StringValue } from 'ms';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 import { AuthGuard } from './auth.guard.js';
@@ -15,7 +16,7 @@ import { UsersModule } from '../users/index.js';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('app.jwt.secret'),
         signOptions: {
-          expiresIn: configService.get<string>('app.jwt.accessTokenExpiration'),
+          expiresIn: configService.get<string>('app.jwt.accessTokenExpiration') as StringValue,
         },
       }),
     }),

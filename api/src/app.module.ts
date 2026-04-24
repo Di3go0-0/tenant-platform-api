@@ -5,9 +5,12 @@ import { ConfigModule } from './infrastructure/config/index.js';
 import { DatabaseModule } from './infrastructure/database/index.js';
 import { PlsqlModule } from './core/plsql/index.js';
 import { AuthModule } from './modules/auth/index.js';
+import { TenantsModule } from './modules/tenants/index.js';
+import { RolesModule } from './modules/roles/index.js';
+import { PermissionsModule } from './modules/permissions/index.js';
 
 @Module({
-  imports: [ConfigModule, DatabaseModule, PlsqlModule, AuthModule],
+  imports: [ConfigModule, DatabaseModule, PlsqlModule, AuthModule, TenantsModule, RolesModule, PermissionsModule],
   controllers: [AppController],
   providers: [AppService],
 })
