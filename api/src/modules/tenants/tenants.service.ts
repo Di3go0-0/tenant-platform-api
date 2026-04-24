@@ -24,10 +24,25 @@ export class TenantsService {
       ]);
       const tenant = result.rows[0] as TenantEntity;
 
+      const defaultRoles = [
+        { name: 'owner', description: 'Full access to the tenant' },
+        { name: 'admin', description: 'Administrative access' },
+        { name: 'member', description: 'Basic access' },
+      ];
+
+      const roles: Record<string, string> = {};
+      for (const role of defaultRoles) {
+        const roleResult = await query(
+          `INSERT INTO roles (tenant_id, name, description) VALUES ($1, $2, $3) RETURNING id`,
+          [tenant.id, role.name, role.description],
+        );
+        roles[role.name] = roleResult.rows[0].id as string;
+      }
+
       await query(TenantQueries.ADD_USER_TO_TENANT, [
         userId,
         tenant.id,
-        'owner',
+        roles['owner'],
       ]);
 
       return tenant;

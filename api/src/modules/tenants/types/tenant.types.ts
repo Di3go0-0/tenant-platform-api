@@ -11,7 +11,7 @@ export type UserTenantEntity = {
   id: string;
   user_id: string;
   tenant_id: string;
-  role: string;
+  role_id: string | null;
   created_at: Date;
 };
 
