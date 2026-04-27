@@ -9,6 +9,7 @@ import { RateLimitGuard } from '../subscriptions/index.js';
 import { AuditLogInterceptor } from '../audit-logs/index.js';
 import { Tenant } from '../../common/decorators/tenant.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
+import { ParseUUIDPipe } from '../../common/pipes/parse-uuid.pipe.js';
 
 @Controller('permissions')
 @UseGuards(AuthGuard, TenantGuard, RateLimitGuard)
@@ -40,7 +41,7 @@ export class PermissionsController {
   }
 
   @Get('role/:roleId')
-  async findByRole(@Param('roleId') roleId: string): Promise<PermissionEntity[]> {
+  async findByRole(@Param('roleId', ParseUUIDPipe) roleId: string): Promise<PermissionEntity[]> {
     return this.permissionsService.getRolePermissions(roleId);
   }
 
@@ -54,7 +55,7 @@ export class PermissionsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id') id: string): Promise<void> {
+  async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     return this.permissionsService.deletePermission(id);
   }
 }
