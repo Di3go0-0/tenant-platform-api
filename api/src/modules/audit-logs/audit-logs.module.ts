@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AuditLogsController } from './audit-logs.controller.js';
 import { AuditLogsService } from './audit-logs.service.js';
 import { AuditLogsRepository } from './repositories/audit-logs.repository.js';
@@ -7,7 +7,7 @@ import { AuthModule } from '../auth/index.js';
 import { TenantsModule } from '../tenants/index.js';
 
 @Module({
-  imports: [AuthModule, TenantsModule],
+  imports: [AuthModule, forwardRef(() => TenantsModule)],
   controllers: [AuditLogsController],
   providers: [AuditLogsService, AuditLogsRepository, AuditLogInterceptor],
   exports: [AuditLogsService, AuditLogInterceptor],
