@@ -5,6 +5,7 @@ import { CreateTenantDto } from './dto/create-tenant.dto.js';
 import { AddUserDto } from './dto/add-user.dto.js';
 import { AuthGuard } from '../auth/index.js';
 import { TenantGuard } from '../../common/guards/tenant.guard.js';
+import { RateLimitGuard } from '../../common/guards/rate-limit.guard.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { Tenant } from '../../common/decorators/tenant.decorator.js';
 
@@ -30,7 +31,7 @@ export class TenantsController {
   }
 
   @Post('users')
-  @UseGuards(TenantGuard)
+  @UseGuards(TenantGuard, RateLimitGuard)
   async addUser(
     @Body() dto: AddUserDto,
     @Tenant() tenantId: string,

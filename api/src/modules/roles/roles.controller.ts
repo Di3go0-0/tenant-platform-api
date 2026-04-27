@@ -5,10 +5,11 @@ import { AssignRoleDto } from './dto/assign-role.dto.js';
 import type { RoleEntity } from './types/role.types.js';
 import { AuthGuard } from '../auth/index.js';
 import { TenantGuard } from '../tenants/index.js';
+import { RateLimitGuard } from '../subscriptions/index.js';
 import { Tenant } from '../../common/decorators/tenant.decorator.js';
 
 @Controller('roles')
-@UseGuards(AuthGuard, TenantGuard)
+@UseGuards(AuthGuard, TenantGuard, RateLimitGuard)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
