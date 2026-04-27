@@ -11,6 +11,7 @@ async function bootstrap() {
   const logger = app.get(LoggerService);
   app.useLogger(logger);
   app.use(helmet());
+  app.enableCors();
   app.useGlobalFilters(new GlobalExceptionFilter(logger));
   app.useGlobalPipes(
     new ValidationPipe({
