@@ -2,7 +2,7 @@ import { Controller, Get, Query, UseGuards, HttpCode, HttpStatus } from '@nestjs
 import { AuditLogsService } from './audit-logs.service.js';
 import type { AuditLogEntity } from './types/audit-log.types.js';
 import { AuthGuard } from '../auth/index.js';
-import { TenantGuard } from '../tenants/index.js';
+import { TenantGuard } from '../../common/guards/tenant.guard.js';
 import { Tenant } from '../../common/decorators/tenant.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 
