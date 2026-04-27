@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Delete, Body, Param, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Body, Param, UseGuards, UseInterceptors, HttpCode, HttpStatus } from '@nestjs/common';
 import { RolesService } from './roles.service.js';
 import { CreateRoleDto } from './dto/create-role.dto.js';
 import { AssignRoleDto } from './dto/assign-role.dto.js';
@@ -6,10 +6,12 @@ import type { RoleEntity } from './types/role.types.js';
 import { AuthGuard } from '../auth/index.js';
 import { TenantGuard } from '../tenants/index.js';
 import { RateLimitGuard } from '../subscriptions/index.js';
+import { AuditLogInterceptor } from '../audit-logs/index.js';
 import { Tenant } from '../../common/decorators/tenant.decorator.js';
 
 @Controller('roles')
 @UseGuards(AuthGuard, TenantGuard, RateLimitGuard)
+@UseInterceptors(AuditLogInterceptor)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 

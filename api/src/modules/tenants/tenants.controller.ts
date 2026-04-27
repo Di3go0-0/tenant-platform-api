@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Body, UseGuards, UseInterceptors, HttpCode, HttpStatus } from '@nestjs/common';
 import { TenantsService } from './tenants.service.js';
 import type { TenantEntity, UserTenantEntity } from './types/tenant.types.js';
 import { CreateTenantDto } from './dto/create-tenant.dto.js';
@@ -6,6 +6,7 @@ import { AddUserDto } from './dto/add-user.dto.js';
 import { AuthGuard } from '../auth/index.js';
 import { TenantGuard } from '../../common/guards/tenant.guard.js';
 import { RateLimitGuard } from '../../common/guards/rate-limit.guard.js';
+import { AuditLogInterceptor } from '../../common/interceptors/audit-log.interceptor.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { Tenant } from '../../common/decorators/tenant.decorator.js';
 
@@ -32,6 +33,7 @@ export class TenantsController {
 
   @Post('users')
   @UseGuards(TenantGuard, RateLimitGuard)
+  @UseInterceptors(AuditLogInterceptor)
   async addUser(
     @Body() dto: AddUserDto,
     @Tenant() tenantId: string,

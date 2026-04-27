@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Delete, Body, Param, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Body, Param, UseGuards, UseInterceptors, HttpCode, HttpStatus } from '@nestjs/common';
 import { PermissionsService } from './permissions.service.js';
 import { CreatePermissionDto } from './dto/create-permission.dto.js';
 import { RolePermissionDto } from './dto/role-permission.dto.js';
@@ -6,11 +6,13 @@ import type { PermissionEntity } from './types/permission.types.js';
 import { AuthGuard } from '../auth/index.js';
 import { TenantGuard } from '../tenants/index.js';
 import { RateLimitGuard } from '../subscriptions/index.js';
+import { AuditLogInterceptor } from '../audit-logs/index.js';
 import { Tenant } from '../../common/decorators/tenant.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 
 @Controller('permissions')
 @UseGuards(AuthGuard, TenantGuard, RateLimitGuard)
+@UseInterceptors(AuditLogInterceptor)
 export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 
