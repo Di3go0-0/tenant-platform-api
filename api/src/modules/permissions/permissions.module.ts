@@ -5,9 +5,10 @@ import { PermissionsRepository } from './repositories/permissions.repository.js'
 import { PermissionsGuard } from '../../common/guards/permissions.guard.js';
 import { AuthModule } from '../auth/index.js';
 import { TenantsModule } from '../tenants/index.js';
+import { SubscriptionsModule } from '../subscriptions/index.js';
 
 @Module({
-  imports: [AuthModule, TenantsModule],
+  imports: [AuthModule, TenantsModule, SubscriptionsModule],
   controllers: [PermissionsController],
   providers: [PermissionsService, PermissionsRepository, PermissionsGuard],
   exports: [PermissionsService, PermissionsGuard],

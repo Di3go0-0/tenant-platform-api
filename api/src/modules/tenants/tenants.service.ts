@@ -1,14 +1,19 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, Inject, forwardRef, ConflictException, NotFoundException } from '@nestjs/common';
 import { PlsqlService } from '../../core/plsql/index.js';
 import { TenantsRepository } from './repositories/tenants.repository.js';
 import { TenantQueries } from './sql/tenants.sql.js';
-import { TenantEntity, CreateTenantData } from './types/tenant.types.js';
+import { TenantEntity, UserTenantEntity, CreateTenantData } from './types/tenant.types.js';
+import { SubscriptionsService } from '../subscriptions/subscriptions.service.js';
+import { RolesRepository } from '../roles/repositories/roles.repository.js';
 
 @Injectable()
 export class TenantsService {
   constructor(
     private readonly tenantsRepository: TenantsRepository,
     private readonly plsqlService: PlsqlService,
+    @Inject(forwardRef(() => SubscriptionsService))
+    private readonly subscriptionsService: SubscriptionsService,
+    private readonly rolesRepository: RolesRepository,
   ) {}
 
   async createTenant(data: CreateTenantData, userId: string): Promise<TenantEntity> {
@@ -63,5 +68,21 @@ export class TenantsService {
 
   async findById(id: string): Promise<TenantEntity | null> {
     return this.tenantsRepository.findById(id);
+  }
+
+  async addUser(tenantId: string, userId: string): Promise<UserTenantEntity> {
+    const existing = await this.tenantsRepository.findUserTenant(userId, tenantId);
+    if (existing) {
+      throw new ConflictException('User already belongs to this tenant');
+    }
+
+    await this.subscriptionsService.validateUserLimit(tenantId);
+
+    const memberRole = await this.rolesRepository.findByNameAndTenant('member', tenantId);
+    if (!memberRole) {
+      throw new NotFoundException('Default member role not found');
+    }
+
+    return this.tenantsRepository.addUserToTenant(userId, tenantId, memberRole.id);
   }
 }
