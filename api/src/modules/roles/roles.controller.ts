@@ -1,4 +1,5 @@
 import { Controller, Post, Get, Delete, Body, Param, UseGuards, UseInterceptors, HttpCode, HttpStatus } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiSecurity } from '@nestjs/swagger';
 import { RolesService } from './roles.service.js';
 import { CreateRoleDto } from './dto/create-role.dto.js';
 import { AssignRoleDto } from './dto/assign-role.dto.js';
@@ -10,6 +11,9 @@ import { AuditLogInterceptor } from '../audit-logs/index.js';
 import { Tenant } from '../../common/decorators/tenant.decorator.js';
 import { ParseUUIDPipe } from '../../common/pipes/parse-uuid.pipe.js';
 
+@ApiTags('Roles')
+@ApiBearerAuth()
+@ApiSecurity('tenant-id')
 @Controller('roles')
 @UseGuards(AuthGuard, TenantGuard, RateLimitGuard)
 @UseInterceptors(AuditLogInterceptor)
@@ -17,6 +21,9 @@ export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a role in the tenant' })
+  @ApiResponse({ status: 201, description: 'Role created' })
+  @ApiResponse({ status: 409, description: 'Role already exists in tenant' })
   async create(
     @Body() dto: CreateRoleDto,
     @Tenant() tenantId: string,
@@ -26,12 +33,16 @@ export class RolesController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'List all roles in the tenant' })
   async findAll(@Tenant() tenantId: string): Promise<RoleEntity[]> {
     return this.rolesService.getRolesByTenant(tenantId);
   }
 
   @Post('assign')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Assign a role to a user' })
+  @ApiResponse({ status: 200, description: 'Role assigned' })
+  @ApiResponse({ status: 404, description: 'Role not found in tenant' })
   async assign(
     @Body() dto: AssignRoleDto,
     @Tenant() tenantId: string,
@@ -41,6 +52,9 @@ export class RolesController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete a role' })
+  @ApiResponse({ status: 204, description: 'Role deleted' })
+  @ApiResponse({ status: 404, description: 'Role not found' })
   async remove(
     @Param('id', ParseUUIDPipe) id: string,
     @Tenant() tenantId: string,
