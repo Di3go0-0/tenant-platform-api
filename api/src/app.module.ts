@@ -8,9 +8,11 @@ import { AuthModule } from './modules/auth/index.js';
 import { TenantsModule } from './modules/tenants/index.js';
 import { RolesModule } from './modules/roles/index.js';
 import { PermissionsModule } from './modules/permissions/index.js';
+import { PlansModule } from './modules/plans/index.js';
+import { SubscriptionsModule } from './modules/subscriptions/index.js';
 
 @Module({
-  imports: [ConfigModule, DatabaseModule, PlsqlModule, AuthModule, TenantsModule, RolesModule, PermissionsModule],
+  imports: [ConfigModule, DatabaseModule, PlsqlModule, AuthModule, TenantsModule, RolesModule, PermissionsModule, PlansModule, SubscriptionsModule],
   controllers: [AppController],
   providers: [AppService],
 })
