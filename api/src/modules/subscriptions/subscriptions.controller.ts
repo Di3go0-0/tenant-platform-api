@@ -4,10 +4,11 @@ import { CreateSubscriptionDto } from './dto/create-subscription.dto.js';
 import type { SubscriptionEntity, SubscriptionWithPlan } from './types/subscription.types.js';
 import { AuthGuard } from '../auth/index.js';
 import { TenantGuard } from '../tenants/index.js';
+import { RateLimitGuard } from '../../common/guards/rate-limit.guard.js';
 import { Tenant } from '../../common/decorators/tenant.decorator.js';
 
 @Controller('subscriptions')
-@UseGuards(AuthGuard, TenantGuard)
+@UseGuards(AuthGuard, TenantGuard, RateLimitGuard)
 export class SubscriptionsController {
   constructor(private readonly subscriptionsService: SubscriptionsService) {}
 

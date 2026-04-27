@@ -5,11 +5,12 @@ import { RolePermissionDto } from './dto/role-permission.dto.js';
 import type { PermissionEntity } from './types/permission.types.js';
 import { AuthGuard } from '../auth/index.js';
 import { TenantGuard } from '../tenants/index.js';
+import { RateLimitGuard } from '../subscriptions/index.js';
 import { Tenant } from '../../common/decorators/tenant.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 
 @Controller('permissions')
-@UseGuards(AuthGuard, TenantGuard)
+@UseGuards(AuthGuard, TenantGuard, RateLimitGuard)
 export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 
