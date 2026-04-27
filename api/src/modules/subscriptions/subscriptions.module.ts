@@ -6,9 +6,10 @@ import { RateLimitGuard } from '../../common/guards/rate-limit.guard.js';
 import { AuthModule } from '../auth/index.js';
 import { TenantsModule } from '../tenants/index.js';
 import { PlansModule } from '../plans/index.js';
+import { AuditLogsModule } from '../audit-logs/index.js';
 
 @Module({
-  imports: [AuthModule, forwardRef(() => TenantsModule), PlansModule],
+  imports: [AuthModule, forwardRef(() => TenantsModule), PlansModule, AuditLogsModule],
   controllers: [SubscriptionsController],
   providers: [SubscriptionsService, SubscriptionsRepository, RateLimitGuard],
   exports: [SubscriptionsService, RateLimitGuard],

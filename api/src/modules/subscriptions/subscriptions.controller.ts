@@ -1,14 +1,16 @@
-import { Controller, Post, Get, Delete, Body, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Body, UseGuards, UseInterceptors, HttpCode, HttpStatus } from '@nestjs/common';
 import { SubscriptionsService } from './subscriptions.service.js';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto.js';
 import type { SubscriptionEntity, SubscriptionWithPlan } from './types/subscription.types.js';
 import { AuthGuard } from '../auth/index.js';
 import { TenantGuard } from '../tenants/index.js';
 import { RateLimitGuard } from '../../common/guards/rate-limit.guard.js';
+import { AuditLogInterceptor } from '../../common/interceptors/audit-log.interceptor.js';
 import { Tenant } from '../../common/decorators/tenant.decorator.js';
 
 @Controller('subscriptions')
 @UseGuards(AuthGuard, TenantGuard, RateLimitGuard)
+@UseInterceptors(AuditLogInterceptor)
 export class SubscriptionsController {
   constructor(private readonly subscriptionsService: SubscriptionsService) {}
 
