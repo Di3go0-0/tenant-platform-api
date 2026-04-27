@@ -8,6 +8,7 @@ import { TenantGuard } from '../tenants/index.js';
 import { RateLimitGuard } from '../subscriptions/index.js';
 import { AuditLogInterceptor } from '../audit-logs/index.js';
 import { Tenant } from '../../common/decorators/tenant.decorator.js';
+import { ParseUUIDPipe } from '../../common/pipes/parse-uuid.pipe.js';
 
 @Controller('roles')
 @UseGuards(AuthGuard, TenantGuard, RateLimitGuard)
@@ -41,7 +42,7 @@ export class RolesController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Tenant() tenantId: string,
   ): Promise<void> {
     return this.rolesService.deleteRole(id, tenantId);
